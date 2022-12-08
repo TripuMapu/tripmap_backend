@@ -26,6 +26,7 @@ var userSchema = new Schema({
     },
     profilepicture: {
         type: String,
+        require: true,
     },
     bookmarks: {
         type: Array,
