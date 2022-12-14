@@ -8,7 +8,7 @@ var url = "mongodb+srv://AhmetBilalTuran:Ab!159357!Ab@cluster0.zujm3.mongodb.net
 
 var functions ={
     addNew: function(req,res){
-        if((!req.body.username) || (!req.body.password) || (!req.body.email)){
+        if((!req.body.username) || (!req.body.password) || (!req.body.email) || (!req.body.fullname)){
             res.json({success: false, msg: 'Bütün Boşlukları Doldurunuz'})
         }
         else{
@@ -23,9 +23,13 @@ var functions ={
                         if(err) throw err
                         if(!user){
                             var newUser = User({
+                                fullname: req.body.fullname,
                                 username: req.body.username,
                                 password: req.body.password,
                                 email: req.body.email,
+                                profilepicture: '',
+                                bookmarks: Array,
+
                             });
                             newUser.save(function(err, newUser){
                                 if(err){

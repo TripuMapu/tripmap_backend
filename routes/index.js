@@ -14,5 +14,8 @@ router.get('/', (req,res)=>{
 router.post('/adduser', useractions.addNew)
 router.post('/login', useractions.login)
 router.get('/getinfo', useractions.getinfo)
+router.post('/addtype', typeactions.addNew)
+router.post('/addcomment', commentactions.addNew)
+router.post('/getcomments', commentactions.getComments)
 
 module.exports = router
