@@ -52,26 +52,31 @@ var functions ={
         }
     },
     login: function (req,res){
-        User.findOne({
-            username: req.body.username
-        }, function(err, user){
-            if(err) throw err
-            if(!user){
-                res.status(200).send({success: false, msg: 'Giriş Başarısız, Kullanıcı Adı veya Şifre Yanlış'})
+        if((!req.body.username)|| (!req.body.password)){
+            res.json({success: false, msg: 'Bütün Boşlukları Doldurunuz'})
+        }else{
+            User.findOne({
+                username: req.body.username
+            }, function(err, user){
+                if(err) throw err
+                if(!user){
+                    res.status(200).send({success: false, msg: 'Giriş Başarısız, Kullanıcı Adı veya Şifre Yanlış'})
+                }
+                else{
+                    user.comparePassword(req.body.password, function(err, isMatch){
+                        if(isMatch && !err){
+                            var token = jwt.encode(user, config.secret)
+                            res.json({success: true, token: token, msg: 'Giriş Başarılı'})
+                        }
+                        else{
+                            return res.status(200).send({success: false, msg: 'Giriş Başarısız, Kullanıcı Adı veya Şifre Yanlış'})
+                        }
+                    })
+                }
             }
-            else{
-                user.comparePassword(req.body.password, function(err, isMatch){
-                    if(isMatch && !err){
-                        var token = jwt.encode(user, config.secret)
-                        res.json({success: true, token: token, msg: 'Giriş Başarılı'})
-                    }
-                    else{
-                        return res.status(200).send({success: false, msg: 'Giriş Başarısız, Kullanıcı Adı veya Şifre Yanlış'})
-                    }
-                })
-            }
+            )
         }
-        )
+        
     },
     getinfo: function(req,res){
         if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer'){

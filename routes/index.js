@@ -17,5 +17,7 @@ router.get('/getinfo', useractions.getinfo)
 router.post('/addtype', typeactions.addNew)
 router.post('/addcomment', commentactions.addNew)
 router.post('/getcomments', commentactions.getComments)
+router.post('/addlocation', locationactions.addNew)
+router.post('/findlocations', locationactions.findlocation)
 
 module.exports = router

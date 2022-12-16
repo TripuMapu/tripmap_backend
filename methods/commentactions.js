@@ -8,14 +8,14 @@ var url = "mongodb+srv://AhmetBilalTuran:Ab!159357!Ab@cluster0.zujm3.mongodb.net
 
 var functions={
     addNew: function(req,res){
-        if((!req.body.commentuserId) || (!req.body.commentlocationId) || (!req.body.commentcontent) (!req.body.commentrating)){
+        if((!req.body.userId) || (!req.body.locationId) || (!req.body.content)|| (!req.body.rating)){
             res.json({success: false, msg: 'Bütün Boşlukları Doldurunuz'})
         }else{
             var newComment = Comment({
-                commentUserId: commentuserId,
-                commentLocationId: commentlocationId,
-                commentContent: commentcontent,
-                commentRating: commentrating,
+                commentUserId: req.body.userId,
+                commentLocationId: req.body.locationId,
+                commentContent: req.body.content,
+                commentRating: req.body.rating,
                 commentDate: new Date(),
             })
             newComment.save(function(err){
@@ -23,16 +23,16 @@ var functions={
                     res.json({success: false, msg: 'Kayıt Başarısız'})
                 }
                 else{
-                    res.json({success: true, msg: 'Başarıyla Kaydolundu'})
+                    res.json({success: true, msg: 'Başarıyla yorum eklendi'})
                 }
             })
         }
     },
     getComments: function(req,res){
-        if(!req.body.commentlocationId){
+        if(!req.body.locationId){
             res.json({success: false, msg: 'Bütün Boşlukları Doldurunuz'})
         }else{
-            Comment.find({commentLocationId: commentlocationId}, function(err, comments){
+            Comment.find({commentLocationId: parseInt(req.body.locationId)}, function(err, comments){
                 if(err) throw err;
                 res.json({success: true, 'array': comments})
             })
