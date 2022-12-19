@@ -37,4 +37,22 @@ districtSchema.pre('save', function(next){
     }).catch(error=> next(error))
 })
 
+const getLocationCountSequenceNextValue = (districtID) => {
+    return new Promise((resolve, reject) => {
+        Counter.findByIdAndUpdate(
+            {"_id": districtID},
+            (error,district) => {
+                if (error){
+                    reject(error);
+                }
+                if(counter){
+                    resolve(district.districtLocationCount + 1);
+                } else{
+                    resolve(null)
+                }
+            }
+        )
+    })
+};
+
 module.exports = mongoose.model('District', districtSchema)
