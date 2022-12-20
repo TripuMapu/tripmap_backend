@@ -9,14 +9,14 @@ var url = "mongodb+srv://AhmetBilalTuran:Ab!159357!Ab@cluster0.zujm3.mongodb.net
 
 var functions={
     addNew: function(req,res){
-        if((!req.body.districtname)||(!req.body.districtimageurl)||(!req.body.districtlocationcount)||(!req.body.districtavaragerating)){
+        if((!req.body.districtname)||(!req.body.districtimageurl)){
             res.json({success:true, msg: 'Bütün Boşlukları Doldurunuz'})
         }else{
             var newDistrict = District({
                 districtName: req.body.districtname,
                 districtImageUrl: req.body.districtimageurl,
-                districtLocationCount: req.body.districtlocationcount,
-                districtAvarageRating: req.body.districtavaragerating, 
+                districtLocationCount: 0,
+                districtAvarageRating: 0, 
             })
             newDistrict.save(function(err){
                 if(err) throw err;
