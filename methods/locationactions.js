@@ -14,36 +14,41 @@ var functions ={
             res.json({success: false, msg: 'Bütün Boşlukları Doldurunuz'})
         }
         else{
-       
-                if(District.exists({_id: req.body.locationDistrictId}) || Type.exists({_id: req.body.locationtypeId})){
-                    var newLocation = Location({
-                        locationTypeId: req.body.locationtypeId,
-                        locationDistrictId: req.body.locationdistrictId,
-                        locationName: req.body.locationname,
-                        locationImageUrl: req.body.locationimageurl,
-                        locationDefination: req.body.locationdefination,
-                        locationCoordinate: req.body.locationcoordinate,
-                        locationAvarageRating: 0
-                        })
-                        newLocation.save(function(err){
-                            if(err) throw err;
-                            Location.count({}, function(err, count){
+            District.exists({_id: req.body.locationDistrictId},function(err, district){
+                if(err) throw err;
+                if(district){
+                    Type.exists({_id: req.body.locationtypeId}, function(err, type){
+                        if(err) throw err;
+                        if(type){
+                            var newLocation = Location({
+                                locationTypeId: req.body.locationtypeId,
+                                locationDistrictId: req.body.locationdistrictId,
+                                locationName: req.body.locationname,
+                                locationImageUrl: req.body.locationimageurl,
+                                locationDefination: req.body.locationdefination,
+                                locationCoordinate: req.body.locationcoordinate,
+                                locationAvarageRating: 0
+                            })
+                            newLocation.save(function(err){
                                 if(err) throw err;
-                                District.findOneAndUpdate({_id: req.body.locationdistrictId}, {districtLocationCount: count}, function(err,district){
+                                Location.count({locationDistrictId: req.body.locationdistrictId}, function(err, count){
                                     if(err) throw err;
-                                    res.json({success: true, msg: 'Lokasyon başarıyla kaydedilmiştir'})
+                                    District.findOneAndUpdate({_id: req.body.locationdistrictId}, {districtLocationCount: count}, function(err,district){
+                                        if(err) throw err;
+                                        res.json({success: true, msg: 'Lokasyon başarıyla kaydedilmiştir'})
+                                        })
                                 })
                             })
-                        
-                        })
-                        
-                        
-                        
-               
+                        }
+                        else{
+                            res.json({success:false, msg: 'Tip bulunamadı'})
+                        }
+                    })
+                    
                 }else{
-                    res.json({success: false, msg: 'Semt bulunamamıştır'})
+                    res.json({success:false, msg: 'Semt Bulunamadı'})
                 }
-          
+            })
         }
     },
     findlocation: function(req, res){
