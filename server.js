@@ -22,6 +22,6 @@ app.use(passport.initialize())
 app.use('/profilepictures', express.static(__dirname +'/profilepictures'));
 require('./config/passport')(passport) 
 
-const PORT = process.env.PORT || 5554
+const PORT = process.env.PORT || 8080
 
 app.listen(PORT, console.log('Server runnning in ' +process.env.NODE_ENV+' mode on port '+PORT))

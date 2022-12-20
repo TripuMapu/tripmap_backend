@@ -14,7 +14,7 @@ var functions ={
             res.json({success: false, msg: 'Bütün Boşlukları Doldurunuz'})
         }
         else{
-            District.exists({_id: req.body.locationDistrictId},function(err, district){
+            District.exists({_id: req.body.locationdistrictId},function(err, district){
                 if(err) throw err;
                 if(district){
                     Type.exists({_id: req.body.locationtypeId}, function(err, type){
