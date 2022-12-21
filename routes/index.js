@@ -23,5 +23,6 @@ router.post('/findlocations', locationactions.findlocation)
 router.post('/getdistricts', districtactions.getdistricts)
 router.post('/adddistrict', districtactions.addNew)
 router.post('/getalllocations', locationactions.getalllocations)
+router.post('/getlocationphotos', locationactions.getlocationphotos)
 
 module.exports = router

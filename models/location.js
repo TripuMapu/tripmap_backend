@@ -17,7 +17,7 @@ var locationSchema = new Schema({
         require: true,
     },
     locationImageUrl:{
-        type: String,
+        type: [String],
         require: true,
     },
     locationDefination:{
