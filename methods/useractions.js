@@ -1,4 +1,5 @@
 var User = require('../models/user')
+var Location = require('../models/location')
 var jwt = require('jwt-simple')
 var config = require('../config/dbconfig')
 var MongoClient = require('mongodb').MongoClient;
@@ -33,6 +34,7 @@ var functions ={
                             });
                             newUser.save(function(err, newUser){
                                 if(err){
+                                    throw err;
                                     res.json({success: false, msg: 'Kayıt Başarısız'})
                                 }
                                 else{
@@ -82,13 +84,65 @@ var functions ={
         if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer'){
             var token = req.headers.authorization.split(' ')[1]
             var decodedtoken = jwt.decode(token, config.secret)
-            return res.json({success: true, msg: 'hello ' + decodedtoken.username, "userid": decodedtoken._id, "username": decodedtoken.username, "email": decodedtoken.email})
+            return res.json({success: true, msg: 'hello ' + decodedtoken.username, "userid": decodedtoken._id, "username": decodedtoken.username,"fullname": decodedtoken.fullname, "email": decodedtoken.email, 'profilepicture': 
+            decodedtoken.profilepicture})
         }else{
             return res.json({success: false, msg: 'no headers'})
         }
     },
+
+    getbookmarks: function(req,res){
+        if(!req.body.userid){
+            res.json({success: false, msg: 'lütfen bütün boşlukları doldurunuz'})
+        }else{
+            User.findOne({_id: parseInt(req.body.userid)}, function(err, user){
+                if (err) throw err;
+                if(!user){
+                    res.json({success: false, msg: 'Kullanıcı bulunamadı'})
+                }else{
+                    res.json({success: true, 'array': user.bookmarks})
+                }
+            })
+        }
+    },
+
+    addtobookmarks:function(req,res){
+        if((!req.body.userid) || (!req.body.locationId)){
+            res.json({success: false, msg: 'lütfen bütün boşlukları doldurunuz'})
+        }
+        else{
+            Location.findOne({_id: req.body.locationId}, function(err, location){
+                if(!location){
+                    res.json({success: false, msg: 'Böyle bir lokasyon bulunmamaktadır'})
+                }else{
+                    User.findOneAndUpdate({_id: parseInt(req.body.userid)},{$push:{bookmarks: parseInt(req.body.locationId)}} ,function(err, user){
+                        if(err) throw err
+                        res.json({success: true, msg: 'Başarıyla eklenmiştir'})
+                    })
+                }
+            })
+          
+        }
+    },
+    
+    removefrombookmarks: function(req,res){
+        if((!req.body.userid) || (!req.body.locationId)){
+            res.json({success: false, msg: 'lütfen bütün boşlukları doldurunuz'})
+        }
+        else{
+            Location.findOne({_id: req.body.locationId}, function(err, location){
+                if(!location){
+                    res.json({success: false, msg: 'Böyle bir lokasyon bulunmamaktadır'})
+                }else{
+                    User.findOneAndUpdate({_id: parseInt(req.body.userid)},{$pull:{bookmarks: parseInt(req.body.locationId)}} ,function(err, user){
+                        if(err) throw err
+                        res.json({success: true, msg: 'Başarıyla kaldırılmıştır'})
+                    })
+                }
+            })
+          
+        }
+    }
 }
-
-
 
 module.exports = functions

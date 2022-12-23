@@ -23,6 +23,9 @@ router.post('/findlocations', locationactions.findlocation)
 router.post('/getdistricts', districtactions.getdistricts)
 router.post('/adddistrict', districtactions.addNew)
 router.post('/getalllocations', locationactions.getalllocations)
-router.post('/getlocationphotos', locationactions.getlocationphotos)
+router.post('/addtobookmarks', useractions.addtobookmarks)
+router.post('/removefrombookmarks', useractions.removefrombookmarks)
+router.post('/getbookmarks', useractions.getbookmarks)
+router.post('/getonefromlocations', locationactions.getonefromlocations)
 
 module.exports = router

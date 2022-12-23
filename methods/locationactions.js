@@ -66,23 +66,26 @@ var functions ={
         }
     },
 
-    getlocationphotos: function(req,res){
-        if(!req.body.locationId){
-            res.json({success:false, msg:'Bütün boşlukları doldurunuz'})
-        }
-        else{
-            Location.findOne({_id: req.body.locationId}, function(err, location){
-                if(err) throw err;
-                res.json({success:true, 'array': location})
-            })
-        }
-    },
-
     getalllocations: function(req, res){
         Location.find(function(err, locations){
             if(err) throw err;
             res.json({success: true, 'array': locations})
         })
+    },
+
+    getonefromlocations: function(req, res){
+        if(!req.body.locationId){
+            res.json({success: false, msg: 'Bütün Boşlukları Doldurunuz'})
+        }else{
+            Location.findOne({_id: req.body.locationId}, function(err, location){
+                if(err) throw err;
+                if(!location){
+                    res.json({success: false, msg: 'İstenilen kriterde lokasyon bulunmamaktadır'})
+                }else{
+                    res.json({success: true, 'location': location})
+                }
+            })
+        }
     }
 
 }
