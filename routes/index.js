@@ -27,5 +27,6 @@ router.post('/addtobookmarks', useractions.addtobookmarks)
 router.post('/removefrombookmarks', useractions.removefrombookmarks)
 router.post('/getbookmarks', useractions.getbookmarks)
 router.post('/getonefromlocations', locationactions.getonefromlocations)
+router.post('/checkifitsinbookmarks', useractions.checkifitsinbookmarks)
 
 module.exports = router

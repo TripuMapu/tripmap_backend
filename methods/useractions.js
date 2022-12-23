@@ -111,7 +111,7 @@ var functions ={
             res.json({success: false, msg: 'lütfen bütün boşlukları doldurunuz'})
         }
         else{
-            Location.findOne({_id: req.body.locationId}, function(err, location){
+            Location.findOne({_id: parseInt(req.body.locationId)}, function(err, location){
                 if(!location){
                     res.json({success: false, msg: 'Böyle bir lokasyon bulunmamaktadır'})
                 }else{
@@ -124,13 +124,32 @@ var functions ={
           
         }
     },
+
+    checkifitsinbookmarks: function(req,res){
+        if((!req.body.userid) || (!req.body.locationId)){
+            res.json({success: false, msg: 'lütfen bütün boşlukları doldurunuz'})
+        }else{
+            User.findOne({_id: parseInt(req.body.userid)}, function(err, user){
+                if(err) throw err;
+                if(!user){
+                    res.json({success: false, msg: 'Böyle bir lokasyon bulunmamaktadır'})
+                }else{
+                    if(user.bookmarks.includes(parseInt(req.body.locationId))){
+                        res.json({success: true, 'condition': true})
+                    }else{
+                        res.json({success: true, 'condition': false})
+                    }
+                }
+            })
+        }
+    },
     
     removefrombookmarks: function(req,res){
         if((!req.body.userid) || (!req.body.locationId)){
             res.json({success: false, msg: 'lütfen bütün boşlukları doldurunuz'})
         }
         else{
-            Location.findOne({_id: req.body.locationId}, function(err, location){
+            Location.findOne({_id: parseInt(req.body.locationId)}, function(err, location){
                 if(!location){
                     res.json({success: false, msg: 'Böyle bir lokasyon bulunmamaktadır'})
                 }else{
