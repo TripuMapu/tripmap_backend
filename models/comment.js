@@ -21,7 +21,7 @@ var commentSchema = new Schema({
         require: true,
     },
     commentDate:{
-        type: Date,
+        type: String,
         require: true,
     }
 })

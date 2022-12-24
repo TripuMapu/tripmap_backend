@@ -2,10 +2,7 @@ var User = require('../models/user')
 var Location = require('../models/location')
 var jwt = require('jwt-simple')
 var config = require('../config/dbconfig')
-var MongoClient = require('mongodb').MongoClient;
-const { default: mongoose } = require('mongoose')
-const { MongoUnexpectedServerResponseError } = require('mongodb')
-var url = "mongodb+srv://AhmetBilalTuran:Ab!159357!Ab@cluster0.zujm3.mongodb.net/mydatabase?retryWrites=true&w=majority";
+var bcrypt = require('bcrypt');
 
 var functions ={
     addNew: function(req,res){
@@ -35,7 +32,7 @@ var functions ={
                             newUser.save(function(err, newUser){
                                 if(err){
                                     throw err;
-                                    res.json({success: false, msg: 'Kayıt Başarısız'})
+                                    //res.json({success: false, msg: 'Kayıt Başarısız'})
                                 }
                                 else{
                                     res.json({success: true, msg: 'Başarıyla Kaydolundu'})
@@ -79,6 +76,47 @@ var functions ={
             )
         }
         
+    },
+
+    getusernamefromid: function(req,res){
+        if(!req.body.userid){
+            res.json({success: false, msg: 'Bütün Boşlukları Doldurunuz'})
+        }else{
+            User.findOne({_id: req.body.userid}, function(err, user){
+                if(err) throw err
+                if(!user){
+                    res.json({success: false, msg: 'Kullanıcı Bulunamadı'})
+                }else{
+                    res.json({success: true, 'username': user.username})
+                }
+            })
+        }
+    },
+
+    changeusername: function(req,res){
+        if((!req.body.userid)||(!req.body.username)){
+            res.json({success: false, msg: 'Bütün Boşlukları Doldurunuz'})
+        }else{
+            User.findOneAndUpdate({_id: req.body.userid},{username: req.body.username}, function(err){
+                if (err) throw err
+                res.json({success: true, msg: 'Kullanıcı adı başarıyla değiştirilmiştir'})
+            })
+        }
+    },
+
+    changepassword: function(req, res){
+        if((!req.body.userid)||(!req.body.password)){
+            res.json({success: false, msg: 'Bütün Boşlukları Doldurunuz'})
+        }else{
+            bcrypt.genSalt(10, function(err,salt){
+                if (err) throw err;
+                bcrypt.hash(req.body.password, salt, function(err, hash){
+                    if(err) throw err;
+                    User.findOneAndUpdate({_id: req.body.userid}, {password: hash})
+                })
+            })
+            
+        }
     },
     getinfo: function(req,res){
         if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer'){

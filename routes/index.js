@@ -28,5 +28,11 @@ router.post('/removefrombookmarks', useractions.removefrombookmarks)
 router.post('/getbookmarks', useractions.getbookmarks)
 router.post('/getonefromlocations', locationactions.getonefromlocations)
 router.post('/checkifitsinbookmarks', useractions.checkifitsinbookmarks)
+router.post('/changeusername', useractions.changeusername)
+router.post('/changepassword', useractions.changepassword)
+router.post('/addtoroutes', routeactions.addtoroutes)
+router.post('/getroutes', routeactions.getroutes)
+router.post('/getlocationidfromname', locationactions.getlocationidfromname)
+router.post('/getusernamefromid', useractions.getusernamefromid)
 
 module.exports = router

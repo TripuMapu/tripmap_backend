@@ -1,3 +1,4 @@
+const { Double } = require('mongodb');
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema;
 const sequencing = require('../config/sequencing');

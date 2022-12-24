@@ -9,11 +9,11 @@ var routeSchema = new Schema({
         require: true,
     },
     routeDate:{
-        type: Date,
+        type: String,
         require: true,
     },
     routeLocations:{
-        type: Array,
+        type: String,
         require: true,
     },
 })

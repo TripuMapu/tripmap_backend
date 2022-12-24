@@ -86,6 +86,21 @@ var functions ={
                 }
             })
         }
+    },
+
+    getlocationidfromname: function(req,res){
+        if(!req.body.locationname){
+            res.json({success: false, msg: 'Bütün Boşlukları Doldurunuz'})
+        }else{
+            Location.findOne({locationName: req.body.locationname}, function(err, location){
+                if(err) throw err
+                if(!location){
+                    res.json({success: false, msg: 'İstenilen kriterde lokasyon bulunmamaktadır'})
+                }else{
+                    res.json({success: true, 'locationid': location._id})
+                }
+            })
+        }
     }
 
 }
